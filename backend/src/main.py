@@ -15,7 +15,7 @@ app = FastAPI(
 # CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:5174"], # In production, replace with specific frontend domains
+    allow_origins=["*"],  # Allow all origins for deployment (Vercel + local)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

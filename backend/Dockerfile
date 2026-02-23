@@ -19,13 +19,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY src/ ./src/
 COPY alembic/ ./alembic/
 COPY alembic.ini .
-COPY .env .
+COPY local_content/ ./local_content/
 
-# Create directory for local storage
-RUN mkdir -p local_content
-
-# Expose port
-EXPOSE 8000
+# Expose port (Hugging Face Spaces requires 7860)
+EXPOSE 7860
 
 # Run application
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "7860"]
