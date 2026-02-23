@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .api.routes import api_router
 from .core.config import settings
 from .core.logging import setup_logging
+from .core.db import init_db
 
 setup_logging()
 
@@ -11,6 +12,10 @@ app = FastAPI(
     description="Deterministic backend for Course Companion FTE (Zero-Backend-LLM)",
     version="1.0.0",
 )
+
+@app.on_event("startup")
+def on_startup():
+    init_db()
 
 # CORS Configuration
 app.add_middleware(
