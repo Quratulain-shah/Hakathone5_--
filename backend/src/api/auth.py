@@ -40,18 +40,23 @@ def register(
     password: str,
     full_name: str
 ) -> Any:
-    user = db.exec(select(User).where(User.email == email)).first()
-    if user:
-        raise HTTPException(
-            status_code=400,
-            detail="The user with this email already exists in the system.",
+    try:
+        user = db.exec(select(User).where(User.email == email)).first()
+        if user:
+            raise HTTPException(
+                status_code=400,
+                detail="The user with this email already exists in the system.",
+            )
+        user = User(
+            email=email,
+            hashed_password=get_password_hash(password),
+            full_name=full_name,
         )
-    user = User(
-        email=email,
-        hashed_password=get_password_hash(password),
-        full_name=full_name,
-    )
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-    return user
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return {"id": str(user.id), "email": user.email, "full_name": user.full_name, "tier": user.tier}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Registration error: {str(e)}")
