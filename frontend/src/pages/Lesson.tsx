@@ -687,7 +687,7 @@ const Lesson: React.FC = () => {
         {/* Main content */}
         <div
           className={`flex-1 transition-all duration-300 min-w-0 ${
-            sidebarOpen ? "lg:ml-80" : "lg:ml-24"
+            sidebarOpen ? "md:ml-80 lg:ml-80" : "md:ml-24 lg:ml-24"
           }`}
         >
           <main className="max-w-4xl mx-auto w-full p-4 md:p-8 lg:p-12">
