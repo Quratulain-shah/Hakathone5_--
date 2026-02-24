@@ -255,7 +255,7 @@ const Lesson: React.FC = () => {
         });
       } else {
         // Create new notes
-        await api.post("/notes", {
+        await api.post("/notes/", {
           content: notes,
           chapter_slug: slug,
         });
