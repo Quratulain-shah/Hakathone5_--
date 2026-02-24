@@ -5,16 +5,13 @@ from ..core.config import settings
 
 class LLMService:
     def __init__(self):
-        if not settings.GEMINI_API_KEY:
-            # We log a warning but don't crash init, 
-            # so the app can start even if key is missing (until feature is used)
-            print("WARNING: GEMINI_API_KEY is not set. Hybrid features will fail.")
-            
+        import httpx
         self.client = openai.OpenAI(
-            api_key=settings.GEMINI_API_KEY or "dummy",
-            base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+            api_key=settings.GROQ_API_KEY or "dummy",
+            base_url=settings.GROQ_BASE_URL,
+            http_client=httpx.Client()
         )
-        self.model = "gemini-flash-lite-latest"
+        self.model = settings.GROQ_MODEL
         self.skills = self._load_skills()
 
     def _load_skills(self):

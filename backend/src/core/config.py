@@ -27,8 +27,11 @@ class Settings(BaseSettings):
     
     API_V1_STR: str = "/api/v1"
     
-    # AI Configuration
-    GEMINI_API_KEY: str = "dummy-key" # Will be overridden by env var
+    # AI Configuration (Groq)
+    GEMINI_API_KEY: str = "dummy-key"
+    GROQ_API_KEY: str = "dummy-key"
+    GROQ_MODEL: str = "llama-3.1-8b-instant"
+    GROQ_BASE_URL: str = "https://api.groq.com/openai/v1"
 
     class Config:
         env_file = ".env"
