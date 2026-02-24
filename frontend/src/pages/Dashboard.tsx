@@ -1227,9 +1227,9 @@ const Dashboard: React.FC = () => {
         </div>
       )}
 
-      <div className="relative max-w-7xl mx-auto px-4 py-8">
+      <div className="relative max-w-7xl mx-auto px-3 md:px-4 py-4 md:py-8">
         {/* Top bar */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-6 md:mb-8 gap-2">
           <div className="flex items-center gap-4">
             <div
               className="w-12 h-12 rounded-xl flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform"
@@ -1274,7 +1274,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             {/* Color selector */}
-            <div className="flex items-center gap-2 bg-white/50 backdrop-blur-sm p-1 rounded-xl">
+            <div className="hidden sm:flex items-center gap-2 bg-white/50 backdrop-blur-sm p-1 rounded-xl">
               {colorOptions.map((option) => (
                 <button
                   key={option.id}
@@ -1703,9 +1703,9 @@ const Dashboard: React.FC = () => {
 
         {/* Main Content Based on Tab */}
         {activeTab === "courses" && (
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
             {/* Left column - Courses (2/3 width) */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-2 space-y-6 md:space-y-8">
               {/* Continue Learning */}
               <div>
                 <h2
@@ -1716,7 +1716,7 @@ const Dashboard: React.FC = () => {
                 </h2>
 
                 {dashboards.length === 0 ? (
-                  <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-12 text-center border border-white/50">
+                  <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-6 md:p-12 text-center border border-white/50">
                     <Rocket
                       className="w-20 h-20 mx-auto mb-4"
                       style={{ color: `${currentColor.text}30` }}
@@ -2232,7 +2232,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             {filteredVideos.length === 0 && (
-              <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-12 text-center border border-white/50">
+              <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-6 md:p-12 text-center border border-white/50">
                 <Youtube
                   className="w-20 h-20 mx-auto mb-4"
                   style={{ color: `${currentColor.text}30` }}
@@ -2262,7 +2262,7 @@ const Dashboard: React.FC = () => {
 
         {/* Community Tab */}
         {activeTab === "community" && (
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
             {/* Left column - Community Leaders */}
             <div className="lg:col-span-2">
               <h2
@@ -2440,7 +2440,7 @@ const Dashboard: React.FC = () => {
 
         {/* Resources Tab */}
         {activeTab === "resources" && (
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
             {/* Left column - Resources Grid */}
             <div className="lg:col-span-2">
               <h2

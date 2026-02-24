@@ -55,7 +55,7 @@ const Lesson: React.FC = () => {
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizScore, setQuizScore] = useState<number | null>(null);
   const [activeColor, setActiveColor] = useState("peach");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 768);
   const [fontSize, setFontSize] = useState(100);
   const [bookmarked, setBookmarked] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
@@ -508,8 +508,8 @@ const Lesson: React.FC = () => {
       </div>
 
       {/* Top Navigation Bar - Fixed heading duplication */}
-      <nav className="relative bg-white/80 backdrop-blur-xl border-b border-white/60 sticky top-0 z-20 px-6 py-4 shadow-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <nav className="relative bg-white/80 backdrop-blur-xl border-b border-white/60 sticky top-0 z-20 px-3 md:px-6 py-3 md:py-4 shadow-sm">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           {/* Left section - Back button and title */}
           <div className="flex items-center gap-4">
             <button
@@ -521,9 +521,9 @@ const Lesson: React.FC = () => {
               <span className="text-sm font-medium font-poppins">Back</span>
             </button>
 
-            <div className="h-8 w-px bg-white/40 mx-2"></div>
+            <div className="hidden sm:block h-8 w-px bg-white/40 mx-2"></div>
 
-            <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
                 style={{ background: `${currentColor.primary}20` }}
@@ -686,11 +686,11 @@ const Lesson: React.FC = () => {
 
         {/* Main content */}
         <div
-          className={`flex-1 transition-all duration-300 ${
-            sidebarOpen ? "ml-64" : "ml-20"
+          className={`flex-1 transition-all duration-300 min-w-0 ${
+            sidebarOpen ? "lg:ml-80" : "lg:ml-24"
           }`}
         >
-          <main className="max-w-4xl mx-auto w-full p-8 md:p-12">
+          <main className="max-w-4xl mx-auto w-full p-4 md:p-8 lg:p-12">
             {quizScore !== null ? (
               // Quiz Results
               <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 text-center border border-white/50 animate-scale-up">

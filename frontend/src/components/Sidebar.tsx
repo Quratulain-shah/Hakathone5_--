@@ -500,7 +500,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Mobile menu button */}
       <button
         onClick={() => setShowMobileSidebar(!showMobileSidebar)}
-        className="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 bg-white/70 backdrop-blur-sm rounded-xl shadow-lg flex items-center justify-center border border-white/50"
+        className="lg:hidden fixed top-3 left-3 z-50 w-9 h-9 bg-white/70 backdrop-blur-sm rounded-xl shadow-lg flex items-center justify-center border border-white/50"
         style={{ color: themeColor.text }}
       >
         {showMobileSidebar ? (
