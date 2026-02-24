@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../lib/api";
@@ -66,6 +67,8 @@ const Lesson: React.FC = () => {
   const [isSavingNote, setIsSavingNote] = useState(false);
   const [noteError, setNoteError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  // Add mobile menu state
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const colors = {
     peach: {
@@ -493,16 +496,43 @@ const Lesson: React.FC = () => {
           border-radius: 0.8rem;
           overflow-x: auto;
         }
+
+        /* Responsive styles for small screens */
+        @media (max-width: 640px) {
+          .prose {
+            font-size: ${fontSize}% !important;
+          }
+          .prose h1 {
+            font-size: 1.8em !important;
+          }
+          .prose h2 {
+            font-size: 1.5em !important;
+          }
+          .prose h3 {
+            font-size: 1.2em !important;
+          }
+          .prose p {
+            font-size: 1em !important;
+          }
+          .prose blockquote {
+            padding-left: 1rem !important;
+            margin: 1rem 0 !important;
+          }
+          .prose pre {
+            padding: 0.8rem !important;
+            font-size: 0.9em !important;
+          }
+        }
       `}</style>
 
       {/* Floating shapes */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div
-          className="absolute top-20 left-20 w-64 h-64 rounded-full opacity-10 animate-float"
+          className="absolute top-20 left-20 w-64 h-64 rounded-full opacity-10 animate-float hidden sm:block"
           style={{ backgroundColor: currentColor.primary }}
         />
         <div
-          className="absolute bottom-20 right-20 w-96 h-96 rounded-full opacity-10 animate-float animation-delay-2000"
+          className="absolute bottom-20 right-20 w-96 h-96 rounded-full opacity-10 animate-float animation-delay-2000 hidden sm:block"
           style={{ backgroundColor: currentColor.secondary }}
         />
       </div>
@@ -511,17 +541,29 @@ const Lesson: React.FC = () => {
       <nav className="relative bg-white/80 backdrop-blur-xl border-b border-white/60 sticky top-0 z-20 px-3 md:px-6 py-3 md:py-4 shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           {/* Left section - Back button and title */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl hover:bg-white/60 transition-all group"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-xl hover:bg-white/60 transition-all group"
               style={{ color: currentColor.text }}
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="text-sm font-medium font-poppins">Back</span>
+              <span className="text-xs sm:text-sm font-medium font-poppins hidden xs:inline">
+                Back
+              </span>
             </button>
 
             <div className="hidden sm:block h-8 w-px bg-white/40 mx-2"></div>
+
+            {/* Mobile title - only shows on very small screens */}
+            <div className="block sm:hidden">
+              <h1
+                className="text-sm font-poppins-bold truncate max-w-[120px]"
+                style={{ color: currentColor.text }}
+              >
+                {lesson.title}
+              </h1>
+            </div>
 
             <div className="hidden sm:flex items-center gap-3">
               <div
@@ -569,108 +611,134 @@ const Lesson: React.FC = () => {
           </div>
 
           {/* Right section - Controls */}
-          <div className="flex items-center gap-2">
-            {/* Color selector */}
-            <div className="flex items-center gap-1 bg-white/60 backdrop-blur-sm p-1.5 rounded-xl mr-2 border border-white/40 shadow-sm">
-              {colorOptions.map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => setActiveColor(option.id)}
-                  className={`relative w-8 h-8 rounded-lg transition-all flex items-center justify-center group ${
-                    activeColor === option.id
-                      ? "scale-110 shadow-md ring-2 ring-white"
-                      : "opacity-60 hover:opacity-100"
-                  }`}
-                  style={{ backgroundColor: option.color }}
-                >
-                  <span className="text-white">{option.icon}</span>
-                  <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-inter capitalize opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap bg-gray-800 text-white px-1.5 py-0.5 rounded">
-                    {option.id}
-                  </span>
-                </button>
-              ))}
-            </div>
-
-            {/* Font size controls */}
-            <div className="flex items-center gap-1 bg-white/60 rounded-xl p-1 border border-white/40 shadow-sm">
-              <button
-                onClick={() => handleFontSizeChange(false)}
-                className="w-8 h-8 rounded-lg hover:bg-white/60 flex items-center justify-center font-bold"
-                style={{ color: currentColor.text }}
-              >
-                <span className="text-sm font-poppins">A-</span>
-              </button>
-              <span
-                className="text-xs px-1 font-inter font-medium min-w-[45px] text-center"
-                style={{ color: currentColor.text }}
-              >
-                {fontSize}%
-              </span>
-              <button
-                onClick={() => handleFontSizeChange(true)}
-                className="w-8 h-8 rounded-lg hover:bg-white/60 flex items-center justify-center font-bold"
-                style={{ color: currentColor.text }}
-              >
-                <span className="text-sm font-poppins">A+</span>
-              </button>
-            </div>
-
-            {/* Bookmark */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            {/* Mobile menu toggle */}
             <button
-              onClick={handleToggleBookmark}
-              className="w-9 h-9 rounded-xl bg-white/60 backdrop-blur-sm flex items-center justify-center hover:bg-white/80 transition-colors border border-white/40 shadow-sm"
-              style={{
-                color: bookmarked ? currentColor.primary : currentColor.text,
-              }}
-            >
-              {bookmarked ? (
-                <BookmarkPlus className="w-4 h-4 fill-current" />
-              ) : (
-                <Bookmark className="w-4 h-4" />
-              )}
-            </button>
-
-            {/* Share */}
-            <button
-              onClick={handleShare}
-              className="w-9 h-9 rounded-xl bg-white/60 backdrop-blur-sm flex items-center justify-center hover:bg-white/80 transition-colors border border-white/40 shadow-sm"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden w-9 h-9 rounded-xl bg-white/60 backdrop-blur-sm flex items-center justify-center hover:bg-white/80 transition-colors border border-white/40 shadow-sm"
               style={{ color: currentColor.text }}
             >
-              <Share2 className="w-4 h-4" />
+              <Menu className="w-4 h-4" />
             </button>
 
-            {/* Mark Complete Button */}
-            {!completed ? (
-              <button
-                onClick={handleMarkComplete}
-                className="group relative px-6 py-2.5 rounded-xl text-white font-medium transition-all hover:scale-105 ml-2 font-poppins text-sm overflow-hidden shadow-md"
-                style={{
-                  background: `linear-gradient(135deg, ${currentColor.primary}, ${currentColor.secondary})`,
-                }}
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                  Mark Complete
-                </span>
-                <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity"></span>
-              </button>
-            ) : (
-              <div className="relative group ml-2">
-                <span className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-green-400 to-green-500 text-white font-poppins text-sm shadow-md">
-                  <CheckCircle className="w-4 h-4" />
-                  Completed
+            {/* Desktop controls - hidden on mobile when menu is closed */}
+            <div className={`${mobileMenuOpen ? 'flex flex-col absolute top-16 right-3 bg-white/95 backdrop-blur-xl rounded-xl p-3 shadow-xl border border-white/60 z-30 w-64' : 'hidden lg:flex'} lg:flex lg:flex-row lg:relative lg:top-0 lg:right-0 lg:bg-transparent lg:p-0 lg:shadow-none lg:border-0 items-start lg:items-center gap-2`}>
+              {/* Color selector */}
+              <div className="flex items-center gap-1 bg-white/60 backdrop-blur-sm p-1.5 rounded-xl mr-2 border border-white/40 shadow-sm w-full lg:w-auto justify-between lg:justify-start">
+                {colorOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    onClick={() => {
+                      setActiveColor(option.id);
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`relative w-7 h-7 lg:w-8 lg:h-8 rounded-lg transition-all flex items-center justify-center group ${
+                      activeColor === option.id
+                        ? "scale-110 shadow-md ring-2 ring-white"
+                        : "opacity-60 hover:opacity-100"
+                    }`}
+                    style={{ backgroundColor: option.color }}
+                  >
+                    <span className="text-white">{option.icon}</span>
+                    <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-inter capitalize opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap bg-gray-800 text-white px-1.5 py-0.5 rounded hidden lg:block">
+                      {option.id}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Font size controls */}
+              <div className="flex items-center gap-1 bg-white/60 rounded-xl p-1 border border-white/40 shadow-sm w-full lg:w-auto justify-between lg:justify-start">
+                <button
+                  onClick={() => handleFontSizeChange(false)}
+                  className="w-7 h-7 lg:w-8 lg:h-8 rounded-lg hover:bg-white/60 flex items-center justify-center font-bold"
+                  style={{ color: currentColor.text }}
+                >
+                  <span className="text-xs lg:text-sm font-poppins">A-</span>
+                </button>
+                <span
+                  className="text-xs px-1 font-inter font-medium min-w-[40px] lg:min-w-[45px] text-center"
+                  style={{ color: currentColor.text }}
+                >
+                  {fontSize}%
                 </span>
                 <button
-                  onClick={() => {
-                    setCompleted(false);
-                    // Optional: Add API call to unmark
-                  }}
-                  className="absolute -top-2 -right-2 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200 hover:bg-gray-50"
+                  onClick={() => handleFontSizeChange(true)}
+                  className="w-7 h-7 lg:w-8 lg:h-8 rounded-lg hover:bg-white/60 flex items-center justify-center font-bold"
+                  style={{ color: currentColor.text }}
                 >
-                  <RotateCcw className="w-3 h-3 text-gray-600" />
+                  <span className="text-xs lg:text-sm font-poppins">A+</span>
                 </button>
               </div>
-            )}
+
+              {/* Bookmark */}
+              <button
+                onClick={() => {
+                  handleToggleBookmark();
+                  setMobileMenuOpen(false);
+                }}
+                className="w-9 h-9 rounded-xl bg-white/60 backdrop-blur-sm flex items-center justify-center hover:bg-white/80 transition-colors border border-white/40 shadow-sm"
+                style={{
+                  color: bookmarked ? currentColor.primary : currentColor.text,
+                }}
+              >
+                {bookmarked ? (
+                  <BookmarkPlus className="w-4 h-4 fill-current" />
+                ) : (
+                  <Bookmark className="w-4 h-4" />
+                )}
+              </button>
+
+              {/* Share */}
+              <button
+                onClick={() => {
+                  handleShare();
+                  setMobileMenuOpen(false);
+                }}
+                className="w-9 h-9 rounded-xl bg-white/60 backdrop-blur-sm flex items-center justify-center hover:bg-white/80 transition-colors border border-white/40 shadow-sm"
+                style={{ color: currentColor.text }}
+              >
+                <Share2 className="w-4 h-4" />
+              </button>
+
+              {/* Mark Complete Button */}
+              {!completed ? (
+                <button
+                  onClick={() => {
+                    handleMarkComplete();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="group relative px-4 lg:px-6 py-2.5 rounded-xl text-white font-medium transition-all hover:scale-105 ml-0 lg:ml-2 font-poppins text-sm overflow-hidden shadow-md w-full lg:w-auto"
+                  style={{
+                    background: `linear-gradient(135deg, ${currentColor.primary}, ${currentColor.secondary})`,
+                  }}
+                >
+                  <span className="relative z-10 flex items-center gap-2 justify-center">
+                    <CheckCircle className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    <span className="hidden lg:inline">Mark Complete</span>
+                    <span className="lg:hidden">Complete</span>
+                  </span>
+                  <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity"></span>
+                </button>
+              ) : (
+                <div className="relative group ml-0 lg:ml-2 w-full lg:w-auto">
+                  <span className="flex items-center gap-2 px-4 lg:px-6 py-2.5 rounded-xl bg-gradient-to-r from-green-400 to-green-500 text-white font-poppins text-sm shadow-md justify-center">
+                    <CheckCircle className="w-4 h-4" />
+                    <span className="hidden lg:inline">Completed</span>
+                    <span className="lg:hidden">Done</span>
+                  </span>
+                  <button
+                    onClick={() => {
+                      setCompleted(false);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="absolute -top-2 -right-2 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border border-gray-200 hover:bg-gray-50"
+                  >
+                    <RotateCcw className="w-3 h-3 text-gray-600" />
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </nav>
@@ -693,29 +761,29 @@ const Lesson: React.FC = () => {
           <main className="max-w-4xl mx-auto w-full p-4 md:p-8 lg:p-12">
             {quizScore !== null ? (
               // Quiz Results
-              <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-8 text-center border border-white/50 animate-scale-up">
+              <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-4 sm:p-8 text-center border border-white/50 animate-scale-up">
                 <div
-                  className="w-20 h-20 rounded-2xl bg-gradient-to-r mx-auto mb-6 flex items-center justify-center"
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-r mx-auto mb-4 sm:mb-6 flex items-center justify-center"
                   style={{
                     background: `linear-gradient(135deg, ${currentColor.primary}, ${currentColor.secondary})`,
                   }}
                 >
-                  <Award className="w-10 h-10 text-white" />
+                  <Award className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                 </div>
 
                 <h2
-                  className="text-3xl font-poppins-bold mb-2"
+                  className="text-2xl sm:text-3xl font-poppins-bold mb-2"
                   style={{ color: currentColor.text }}
                 >
                   Quiz Complete!
                 </h2>
                 <p
-                  className="mb-6 font-inter"
+                  className="mb-4 sm:mb-6 font-inter text-sm sm:text-base"
                   style={{ color: `${currentColor.text}80` }}
                 >
                   You scored{" "}
                   <span
-                    className="text-2xl font-poppins-bold"
+                    className="text-xl sm:text-2xl font-poppins-bold"
                     style={{ color: currentColor.primary }}
                   >
                     {quizScore}
@@ -732,13 +800,13 @@ const Lesson: React.FC = () => {
                       onClick={() =>
                         navigate(`/lesson/${lesson.next_chapter_slug}`)
                       }
-                      className="group px-8 py-4 rounded-xl text-white font-poppins-bold transition-all hover:scale-105 flex items-center justify-center gap-2"
+                      className="group px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-white font-poppins-bold transition-all hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base"
                       style={{
                         background: `linear-gradient(135deg, ${currentColor.primary}, ${currentColor.secondary})`,
                       }}
                     >
                       Next Lesson
-                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                     </button>
                   )}
                   <button
@@ -746,7 +814,7 @@ const Lesson: React.FC = () => {
                       setQuizScore(null);
                       setShowQuiz(false);
                     }}
-                    className="px-8 py-3 rounded-xl font-medium border hover:bg-white/50 transition-colors font-inter"
+                    className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-medium border hover:bg-white/50 transition-colors font-inter text-sm sm:text-base"
                     style={{
                       borderColor: currentColor.primary,
                       color: currentColor.primary,
@@ -756,7 +824,7 @@ const Lesson: React.FC = () => {
                   </button>
                   <button
                     onClick={() => navigate("/dashboard")}
-                    className="px-8 py-3 rounded-xl font-medium font-inter"
+                    className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-medium font-inter text-sm sm:text-base"
                     style={{ color: `${currentColor.text}60` }}
                   >
                     Back to Dashboard
@@ -779,10 +847,10 @@ const Lesson: React.FC = () => {
 
                 {/* Notes Section - Fixed with better error handling */}
                 {showNotes ? (
-                  <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-6 border border-white/50 mb-8 animate-scale-up">
+                  <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-white/50 mb-8 animate-scale-up">
                     <div className="flex items-center justify-between mb-4">
                       <h3
-                        className="font-poppins-bold text-lg"
+                        className="font-poppins-bold text-base sm:text-lg"
                         style={{ color: currentColor.text }}
                       >
                         Your Notes
@@ -790,16 +858,16 @@ const Lesson: React.FC = () => {
                       {savedNotes && (
                         <span className="text-xs font-inter bg-green-500/20 text-green-600 px-2 py-1 rounded-full flex items-center gap-1">
                           <CheckCheck className="w-3 h-3" />
-                          Saved
+                          <span className="hidden sm:inline">Saved</span>
                         </span>
                       )}
                     </div>
 
                     {/* Error message */}
                     {noteError && (
-                      <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center gap-2 text-red-600">
+                      <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center gap-2 text-red-600 text-sm">
                         <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                        <span className="text-sm font-inter">{noteError}</span>
+                        <span className="text-xs sm:text-sm font-inter">{noteError}</span>
                       </div>
                     )}
 
@@ -807,7 +875,7 @@ const Lesson: React.FC = () => {
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       placeholder="Write your notes here... (Markdown supported)"
-                      className="w-full h-40 p-4 bg-white/60 border-2 rounded-xl focus:outline-none focus:ring-2 mb-4 font-inter text-base"
+                      className="w-full h-32 sm:h-40 p-3 sm:p-4 bg-white/60 border-2 rounded-xl focus:outline-none focus:ring-2 mb-4 font-inter text-sm sm:text-base"
                       style={{
                         borderColor:
                           notes !== savedNotes
@@ -824,7 +892,7 @@ const Lesson: React.FC = () => {
                           setShowNotes(false);
                           setNoteError(null);
                         }}
-                        className="px-4 py-2 rounded-xl border font-inter hover:bg-white/50 transition-colors"
+                        className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border font-inter hover:bg-white/50 transition-colors text-sm"
                         style={{
                           borderColor: currentColor.primary,
                           color: currentColor.primary,
@@ -836,20 +904,22 @@ const Lesson: React.FC = () => {
                       <button
                         onClick={saveNotes}
                         disabled={isSavingNote || notes === savedNotes}
-                        className="px-6 py-2 rounded-xl text-white font-poppins flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105"
+                        className="px-4 sm:px-6 py-1.5 sm:py-2 rounded-xl text-white font-poppins flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 text-sm"
                         style={{
                           background: `linear-gradient(135deg, ${currentColor.primary}, ${currentColor.secondary})`,
                         }}
                       >
                         {isSavingNote ? (
                           <>
-                            <Loader className="w-4 h-4 animate-spin" />
-                            Saving...
+                            <Loader className="w-3 h-3 sm:w-4 sm:h-4 animate-spin" />
+                            <span className="hidden sm:inline">Saving...</span>
+                            <span className="sm:hidden">Save</span>
                           </>
                         ) : (
                           <>
-                            <FileText className="w-4 h-4" />
-                            Save Notes
+                            <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
+                            <span className="hidden sm:inline">Save Notes</span>
+                            <span className="sm:hidden">Save</span>
                           </>
                         )}
                       </button>
@@ -862,19 +932,20 @@ const Lesson: React.FC = () => {
                     )}
                   </div>
                 ) : (
-                  <div className="flex items-center gap-3 mb-8">
+                  <div className="flex items-center gap-3 mb-8 flex-wrap">
                     <button
                       onClick={() => setShowNotes(true)}
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/50 hover:bg-white/70 transition-colors font-inter border border-white/40"
+                      className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-white/50 hover:bg-white/70 transition-colors font-inter border border-white/40 text-sm"
                       style={{ color: currentColor.text }}
                     >
-                      <FileText className="w-4 h-4" />
+                      <FileText className="w-3 h-3 sm:w-4 sm:h-4" />
                       {savedNotes ? "Edit Notes" : "Add Notes"}
                     </button>
                     {savedNotes && (
-                      <span className="text-xs font-inter bg-green-500/20 text-green-600 px-3 py-1.5 rounded-full flex items-center gap-1">
+                      <span className="text-xs font-inter bg-green-500/20 text-green-600 px-2 sm:px-3 py-1.5 rounded-full flex items-center gap-1">
                         <CheckCheck className="w-3 h-3" />
-                        Notes saved
+                        <span className="hidden sm:inline">Notes saved</span>
+                        <span className="sm:hidden">Saved</span>
                       </span>
                     )}
                   </div>
@@ -882,22 +953,22 @@ const Lesson: React.FC = () => {
 
                 {/* Quiz Section */}
                 {lesson.quiz && (
-                  <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-8 border border-white/50 text-center">
+                  <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-4 sm:p-8 border border-white/50 text-center">
                     <h3
-                      className="text-2xl font-poppins-bold mb-2"
+                      className="text-xl sm:text-2xl font-poppins-bold mb-2"
                       style={{ color: currentColor.text }}
                     >
                       Ready to test your knowledge?
                     </h3>
                     <p
-                      className="mb-6 font-inter"
+                      className="mb-4 sm:mb-6 font-inter text-sm sm:text-base"
                       style={{ color: `${currentColor.text}80` }}
                     >
                       Take a quick quiz to reinforce what you've learned
                     </p>
                     <button
                       onClick={() => setShowQuiz(true)}
-                      className="px-8 py-3 rounded-xl text-white font-poppins-bold transition-all hover:scale-105"
+                      className="px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl text-white font-poppins-bold transition-all hover:scale-105 text-sm sm:text-base"
                       style={{
                         background: `linear-gradient(135deg, ${currentColor.primary}, ${currentColor.secondary})`,
                       }}
@@ -928,7 +999,7 @@ const Lesson: React.FC = () => {
               <div className="animate-scale-up">
                 <button
                   onClick={() => setShowQuiz(false)}
-                  className="mb-6 flex items-center gap-2 text-sm hover:underline font-inter"
+                  className="mb-4 sm:mb-6 flex items-center gap-2 text-sm hover:underline font-inter"
                   style={{ color: currentColor.primary }}
                 >
                   <ArrowLeft className="w-4 h-4" /> Back to Lesson
@@ -948,14 +1019,14 @@ const Lesson: React.FC = () => {
           </main>
 
           {/* Footer Navigation */}
-          <footer className="border-t border-white/50 bg-white/30 backdrop-blur-sm px-8 py-4">
+          <footer className="border-t border-white/50 bg-white/30 backdrop-blur-sm px-4 sm:px-8 py-3 sm:py-4">
             <div className="max-w-4xl mx-auto flex justify-between items-center">
               <button
                 onClick={() =>
                   lesson.prev_chapter_slug &&
                   navigate(`/lesson/${lesson.prev_chapter_slug}`)
                 }
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all font-inter ${
+                className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl transition-all font-inter ${
                   lesson.prev_chapter_slug
                     ? "hover:bg-white/50 cursor-pointer"
                     : "opacity-30 cursor-not-allowed"
@@ -964,14 +1035,15 @@ const Lesson: React.FC = () => {
                 disabled={!lesson.prev_chapter_slug}
               >
                 <ChevronLeft className="w-4 h-4" />
-                <span className="text-sm font-medium">Previous</span>
+                <span className="text-xs sm:text-sm font-medium">Previous</span>
               </button>
 
               <span
-                className="text-xs font-inter"
+                className="text-xs sm:text-sm font-inter"
                 style={{ color: `${currentColor.text}40` }}
               >
-                {lesson.chapter_number} / {lesson.total_chapters}
+                <span className="hidden sm:inline">{lesson.chapter_number} / {lesson.total_chapters}</span>
+                <span className="sm:hidden">{lesson.chapter_number}/{lesson.total_chapters}</span>
               </span>
 
               <button
@@ -979,7 +1051,7 @@ const Lesson: React.FC = () => {
                   lesson.next_chapter_slug &&
                   navigate(`/lesson/${lesson.next_chapter_slug}`)
                 }
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all font-inter ${
+                className={`flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl transition-all font-inter ${
                   lesson.next_chapter_slug
                     ? "hover:bg-white/50 cursor-pointer"
                     : "opacity-30 cursor-not-allowed"
@@ -987,7 +1059,7 @@ const Lesson: React.FC = () => {
                 style={{ color: currentColor.text }}
                 disabled={!lesson.next_chapter_slug}
               >
-                <span className="text-sm font-medium">Next</span>
+                <span className="text-xs sm:text-sm font-medium">Next</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -1000,6 +1072,14 @@ const Lesson: React.FC = () => {
         context={lesson.markdown_content || ""}
         currentColor={currentColor}
       />
+
+      {/* Mobile menu backdrop */}
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-10 lg:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
     </div>
   );
 };
