@@ -83,6 +83,7 @@ async def chat_with_tutor(
         )
 
         return ChatResponse(response=response_text)
+    except HTTPException:
+        raise
     except Exception as e:
-        print(f"Chat Error: {e}")
-        raise HTTPException(status_code=500, detail="AI Tutor is temporarily unavailable")
+        raise HTTPException(status_code=500, detail=f"Chat error: {str(e)}")

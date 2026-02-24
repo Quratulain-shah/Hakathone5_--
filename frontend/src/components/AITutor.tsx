@@ -32,9 +32,21 @@ const AITutor: React.FC<AITutorProps> = ({ context }) => {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [progressContext, setProgressContext] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const toggleChat = () => setIsOpen(!isOpen);
+
+  // Fetch user progress when chat opens
+  useEffect(() => {
+    if (!isOpen || progressContext) return;
+    api.get("/users/me").then((res) => {
+      const u = res.data;
+      setProgressContext(
+        `Student: ${u.full_name}, Tier: ${u.tier}, Streak: ${u.streak_count} days`
+      );
+    }).catch(() => {});
+  }, [isOpen]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -49,9 +61,10 @@ const AITutor: React.FC<AITutorProps> = ({ context }) => {
     setLoading(true);
 
     try {
+      const enrichedContext = [context, progressContext].filter(Boolean).join("\n\n");
       const res = await api.post("/premium/chat", {
         message: userMsg,
-        context: context || "",
+        context: enrichedContext,
       });
       setMessages((prev) => [
         ...prev,
