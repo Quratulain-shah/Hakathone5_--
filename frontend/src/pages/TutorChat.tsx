@@ -331,11 +331,11 @@ const TutorChat: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white flex">
+    <div className="min-h-screen bg-white flex overflow-hidden">
       {/* Mobile Sidebar Toggle */}
       <button
         onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-lg shadow-lg border border-gray-200"
+        className="lg:hidden fixed top-3 left-3 z-50 p-1.5 bg-white rounded-lg shadow-lg border border-gray-200"
       >
         {isMobileSidebarOpen ? (
           <X className="w-5 h-5" />
@@ -562,7 +562,7 @@ const TutorChat: React.FC = () => {
                     msg.role === "assistant" ? "bg-gray-50" : "bg-white"
                   }`}
                 >
-                  <div className="max-w-3xl mx-auto px-4 py-6 flex gap-4">
+                  <div className="max-w-3xl mx-auto px-2 sm:px-4 py-4 sm:py-6 flex gap-2 sm:gap-4">
                     {/* Avatar - Only show for assistant, user avatar is hidden (ChatGPT style) */}
                     {msg.role === "assistant" ? (
                       <div className="w-8 h-8 rounded-sm flex items-center justify-center overflow-hidden bg-white shrink-0">
@@ -592,7 +592,7 @@ const TutorChat: React.FC = () => {
 
               {chatLoading && (
                 <div className="bg-gray-50">
-                  <div className="max-w-3xl mx-auto px-4 py-6 flex gap-4">
+                  <div className="max-w-3xl mx-auto px-2 sm:px-4 py-4 sm:py-6 flex gap-2 sm:gap-4">
                     <div className="w-8 h-8 rounded-sm flex items-center justify-center overflow-hidden bg-white shrink-0">
                       <img
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADgCAMAAADCMfHtAAAAilBMVEX///8AAADp6enl5eXAwMDh4eH6+vr29vbz8/Pq6urv7++lpaWQkJD5+fna2tq/v79vb2+qqqqGhobU1NTMzMxdXV1OTk5paWmxsbGYmJhlZWV5eXm5ubl6enqfn58lJSUzMzNERESKiooeHh4RERE7OztYWFgZGRk2NjY/Pz9JSUkLCwssLCwjIyOVKViKAAAMI0lEQVR4nO1de1/qMAxlON5vQXkqooheH9//610BYUmbpO3WMu799fwpc+vZ2jQ5SdtKJSIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIi4qrQazbrZbchEKqD7vD9Ldnj82296K76/xPT5myYENh1bspumR8MdhS9I55GvbKbVxS9+SfP74Blq+w2FkHj1kDvX+f4aMNvj9uyW5oP/Sdbgj+YlN3aHOg48Nt31bLb64w7N4JJ8tUuu8lOaK1dCf5gXHarHdCnKdwv553RqNNd3n2Rvw/Kbrc1xkTrpyvkwDQmty//LkX9C+5WlBPaf9AuTH9cvFo66zz+oLPqVy/edivcaJ+PbWhP8wiGigu0m4+vzkNvKG3805eubpI+OcaC7AHlYYOb1zFdP9maOSbDK7KzXdSytUV8VBdijwyv12KFsBldWP1P1eYr/kRa1+HZvcE2WTnUDd2iclg0QjffDNRHrQi6ua+r0ARMaMHWDC3+YeLq3U1LNqtT0JY/5surzu55kryUGi7XYFOapqvrzwKRLS9+lDlxLEE7UtPFM7r9993VuN2o75XV2qB7T11ivHUwNEErpoZrx6QAMNQbny71y0qbGqFZlPtoe6o3O0kemclgppmjsmZG0JBH8cI5xU9y7wZqpFWOlAzdGem6AeXC3BpmAcUqbS8uJDfSBxi2d/krax8Ev535m/Txe7n32HgLpOq8xs5ZDcJuJGu7YYUfIo8Dr2h2tSazL5h00Yzx1Qm4p9b8NN+IBjVtz+hrJ4Qykzw4eNPIQr36IWDCiPoodCetUmHghygAaEDdxfrbF0Cf9pu/iEvrVI7mzXnqRsM4vBOuD8AjiKCCdNHmOZ65Af8vWGwvaG6oVpPdh3TRhkbXnEIb3iLXHayhaYYZVOeSctFe3QZghtWlPuKEJ6jY8Tql4BeI1WG4UZCEhFQgmGABmDAxz/yNW52HrhwAws4TTtTQv+AOmB3MULv0jo/S60dV6lXkCOxpMN9NS0wMa/CrIoZt5dInofWZy7MQkolVcLdAOcem0uj7/cDjGLbwtSP+thM0YAUrAhxUxnsqinfc6ONgsGIo6Iu6y8MOMvCoO0+UMLDp+NPUHssx3AnJMsrl2XAzCrjGEycEbGXOBQZGhl9CjMSoUpxXAPJVIYJ9FIlmo8XEUHDRxq8MwYQJA8GsH2AgomgJNNvEkH3ZtCp1xguhHQJr6t+tQc4arIExMeQCVs59z0BIHFk/sstuuWABHo3m23wMV1h9GVVSSuvWZKrN+aeNX3rKXI+i8zwM+xt4u18ipNSoDLfMrdl6Jog+IbaNHMPTmNEZKqrUuTOSAxO7QqBreyYIR6ES5zozxIWLaC4ZKz7FAYsW+b+eA304LysKkiPDFKtSatBMTpCZ3QSanWeG4HHq/ObEsIZzSg+6gl0nbezJkQvGEEaF6p0dGPZw5v6eNrNk+vTXkQPWyC9DYBq0INaeoaJA8tnACaUOLPeOXDBLAyYvLYq1Zag1+13wV0k59hE6pmuvBMFkqAfXdgzJrnfHxxw9qhTlZbwRGlIE4I3qgawNQzZz/8yPphqZ6D7DpuDDHiBo0dUDC4ZcjLSHECOkUsmU3xRUpuF/Eu0wMKwqpfvzOnbPJP2GdOSO8Jvvzu5LFNabGGKR4qA0tRfob1Newm6zNZpepSjgshFpHxND8nspcr8QJff/kATfPPJDppSYwxwYwjGHx+ZWSEaRo9jvYhvAgZCIrBkqwZ6SdtsIqV3CEvsdhuAlEr3fkuG9HrDf4PlgySeFW9ps6rfIDUyHeRm+0S5aiqpSpeSuWsvoN9UNHHrC6tkw5CcvHCx+C51PmTlM1WVOKNpLxZSoUrMviMd9/MF9TvlApczBkBWwzy3foJYLGTg8tXqsOgFiN+F/GH0a4/0Vm/TJJweRp/DuzoQDmA+JactdiVKh5c35TDjq0nkKHmi0xJsGYCgMXdRR/RUsZPckLFgQhvwHgnG0v+Wn4K76j/4Y4vmAmUJRatlbAmop3dMfw3bdRqmCVSfePiK4qe52+GNY1dVGypGDQ9HXSATmXE+IgLmkOEOjYlzB/dSbOf3O7ql1U67MJSdDtRb1W585YKiRm5ICEOjogRkMZsGqytwM1cyN9k4b4Me8NWQqYG5NE+Jxkc15JsvPUBmO+sAQX3hOgAfqfmMNRza/Y6MIQzwcNb8PLEJ6yU1JAZyqCO8bD53jTFaMIbRu+sQItBtfq76h/aKKdZTVkvukZ0GGwIDpDEFU6a2GD7q85E2Vmey2fnopIRiCHx/yMtIIwObTWmX6Da85+2AhGAK78JSHDQn4Ebm7khvvBGEIMv7uVBggj5erm2sQEnUQhsDy+RO/UfaZ1YF0iToIw0H2q685v4Ijs2THXrZSSn/sVQwHhmC5nEdtGPsuH/wyOVxrIG+PUQFKlANDIDv4XFeqKJZ8VkzJLQ2loQKySw4MgVXwWqSoaOtCeeAYJ+35IAe+NQeGoB5bKK/OAaXYQJKoca0Bk1vCq0qvgaGmGQkStVJrQCxWU1eVXkEvpRbMCOGLnFvSN/5wYFgTfy0AcjdEqdaAlySIVaWlz4c/oHd0eBdqDbAj93IauJNv4j4ODMH78VrS3tJbdcSCT1gqjtwhUap039Pc4sAQ3NQnQWndmjBz9HHR6G1bSW/fnF5crtjCW5B/gFDeIoaiK/6/tmlmNuwZgs7ktzZKXj7AFFPuQReNJr+ugDtDsQytCLLh8zF2XICu1xokZ13OnSEYx35NaWYAl+6bCEzUGu7zYkNnhkCl8ls5BMb3vnc1qY0ghEVOyvLTbBp1ZghEb7/DsJ7d+Fgm0HfYzENRqqDq6sqwB+7jt3IIMDyNb9JKErUGSt4Ml866MoRmyyc/xDAbbzYrXZQxq/ZkR4ZQMfK8vkvrpQe0cLh7BHLklApvzRo5MoTP87zPKWCIQlp5pcsNroIhlli4MYQGy/sCtixeVZRmfqWLUoH4QXkFTgzRamvvW9VkSuGH8gtdqj5QIn1mSxMnhlCtDLkGUV8bZ7FRIKfWuDBEjqP/tcCy0pxSjlwGvn7PQS9FfT7ApvxguJGRhHBggKSannq4mSGaVYl1A4UBNGHaWyIduT0EpSPT24wM8UAIsv8euD9zBbkrm1BQWdtklxkYVrHyEebgiKn2WB2DRIGkOKJvLjNUYhmLXVLzAAxEYWMKFO5KOyoojZYYamdmBNpZGNa6CtXyIG9hvaVJothnwHBSqWmeYbBt6YAHJlbN/e4H8cAvTbvRd3FDvwPN91Yf2+G2o4XRkuz1TpaLrvCZCW0Zm46afgH8quEAHlNgixjKj11jl1zacSvohsLQ/8ybMSBjETVvzq9Z3IbdpRW59rnsWZPSJL+0z8JuDLILvUcrfHKetbhWmkBFXVuRIfz2pXX4OGe/YvVGNJrcaJfm936JfYSRe+1Wo6usjvntdaRNpo/k8Stws0C1lg6dhtxo94Ux/FRnnl9qa318koXgVWO4aeTappnbxwseHYBnazspgTwLgV9TqXbSuwvvxo4ru74t6rrIjXaF/4Md+ukhvfgBHuruggZdltxoV1rbjB5QzokIaid6kyp1yQEoG2HwSr79ttwamte4HtE9qUFqN1O5ZNJugW1gECmZ4UCzdimZNZb2iTggxLofd5BZp9fbWX9/Cke90R6vuhvqEosiJuh0l3n+oxDeSHuSCPu1/ALVtJR6cHCN8jENEPbcOQOKG35TvM6ou574Y3UWArpp6cfp0rvrc7DaDx9pTqE3X7dA2/4z2p2FgIyv50KLnJjYHf5rKT1g7+5aTgZMhZ1kM9jsY6EcuHIFffSEiU1fXRurl5SYMJBunxPNkbz32AGCPlzRJfDPKzgREKMxUY8S+9LWCPFO5liLr0qd63lU+6v9gbedWTret1A/Z+CZanhvpg9lvxV54UB4r19zbCKrM2oU/ysEiWziAR/T7ugHnecpM3wvdeKRDzAndYtYl+6sOaFp5xIAhDkVICS48gUGlzjOyTfG/MmbGl7/pSEIIJ08inAh3T4A2lbHG19Mtw+ClonjRXX7MKjPNjy/S+v2odBeUVuuboerq3Ozi+AmnQ+/jtb182Uz7KZX6mMXRq/5X323iIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIj/An8BV8OQPfA5100AAAAASUVORK5CYII="
@@ -635,7 +635,7 @@ const TutorChat: React.FC = () => {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Message AI Tutor..."
-                    className="w-full bg-white border border-gray-200 rounded-lg pl-4 pr-12 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all"
+                    className="w-full bg-white border border-gray-200 rounded-lg pl-3 pr-10 py-2 sm:pl-4 sm:pr-12 sm:py-3 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all"
                     disabled={chatLoading}
                   />
                   <button

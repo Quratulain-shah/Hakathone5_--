@@ -118,7 +118,7 @@ const AITutor: React.FC<AITutorProps> = ({ context }) => {
       <button
         onClick={toggleChat}
         style={{ backgroundColor: theme.primary }}
-        className="fixed bottom-8 right-8 text-white p-4 rounded-full shadow-lg hover:opacity-90 transition-all z-50 flex items-center justify-center cursor-pointer"
+        className="fixed bottom-4 right-4 md:bottom-8 md:right-8 text-white p-3 md:p-4 rounded-full shadow-lg hover:opacity-90 transition-all z-[9999] flex items-center justify-center cursor-pointer"
       >
         {isOpen ? (
           <X className="w-6 h-6" />
@@ -130,7 +130,7 @@ const AITutor: React.FC<AITutorProps> = ({ context }) => {
       {/* Chat Window - Light Orange Theme */}
       {isOpen && (
         <div
-          className="fixed bottom-24 right-8 w-96 h-[500px] rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4"
+          className="fixed bottom-16 right-2 left-2 md:left-auto md:right-8 md:w-96 h-[75vh] md:h-[500px] rounded-2xl shadow-2xl z-[9998] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4"
           style={{
             backgroundColor: theme.background,
             borderColor: theme.border,
