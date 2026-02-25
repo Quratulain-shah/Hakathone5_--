@@ -1,3 +1,4 @@
+
 # Data Model: Course Companion Phase 1
 
 ## Entities

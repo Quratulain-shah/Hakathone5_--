@@ -20,6 +20,7 @@ COPY src/ ./src/
 COPY alembic/ ./alembic/
 COPY alembic.ini .
 COPY local_content/ ./local_content/
+COPY .agent/ ./.agent/
 
 # Expose port (Hugging Face Spaces requires 7860)
 EXPOSE 7860
