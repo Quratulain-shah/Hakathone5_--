@@ -335,7 +335,8 @@ const TutorChat: React.FC = () => {
       {/* Mobile Sidebar Toggle */}
       <button
         onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-        className="lg:hidden fixed top-3 left-3 z-50 p-1.5 bg-white rounded-lg shadow-lg border border-gray-200"
+        className="lg:hidden fixed top-3 left-3 z-50 p-2 bg-white rounded-lg shadow-lg border border-gray-200"
+        aria-label="Toggle sidebar"
       >
         {isMobileSidebarOpen ? (
           <X className="w-5 h-5" />
@@ -434,9 +435,9 @@ const TutorChat: React.FC = () => {
       <div className="flex-1 flex flex-col h-screen bg-white overflow-hidden">
         {!chatUnlocked ? (
           /* ===== PRICING TIERS - 4 IN A ROW ===== */
-          <div className="flex-1 overflow-y-auto p-8 bg-gray-50">
+          <div className="flex-1 overflow-y-auto pt-14 lg:pt-0 p-4 sm:p-8 bg-gray-50">
             <div className="max-w-7xl mx-auto">
-              <div className="text-center mb-8">
+              <div className="text-center mb-6 sm:mb-8">
                 <div className="inline-flex items-center gap-2 bg-white border border-gray-200 text-gray-900 px-4 py-2 rounded-full text-sm font-medium mb-4 shadow-sm">
                   <Sparkles className="w-4 h-4" />
                   Premium Feature
@@ -522,7 +523,7 @@ const TutorChat: React.FC = () => {
           /* ===== CHAT INTERFACE - EXACT CHATGPT STYLE WITH PROPER ALIGNMENT ===== */
           <>
             {/* Chat Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-white">
+            <div className="flex items-center justify-between pl-12 lg:pl-4 pr-4 py-3 border-b border-gray-200 bg-white">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-sm flex items-center justify-center overflow-hidden bg-white">
                   <img
@@ -538,17 +539,17 @@ const TutorChat: React.FC = () => {
                   </span>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-md">
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-md truncate max-w-[120px] sm:max-w-xs">
                   {selectedChapter
                     ? chapters
                         .find((c) => c.slug === selectedChapter)
-                        ?.title?.substring(0, 25) +
+                        ?.title?.substring(0, 20) +
                       (chapters.find((c) => c.slug === selectedChapter)?.title
-                        ?.length > 25
+                        ?.length > 20
                         ? "..."
                         : "")
-                    : "No chapter selected"}
+                    : "No chapter"}
                 </span>
               </div>
             </div>
@@ -626,7 +627,7 @@ const TutorChat: React.FC = () => {
             </div>
 
             {/* Input Area with ChatGPT-style icons */}
-            <div className="border-t border-gray-200 bg-white p-4">
+            <div className="border-t border-gray-200 bg-white p-2 sm:p-4">
               <div className="max-w-3xl mx-auto">
                 <div className="relative">
                   <input
@@ -635,7 +636,7 @@ const TutorChat: React.FC = () => {
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Message AI Tutor..."
-                    className="w-full bg-white border border-gray-200 rounded-lg pl-3 pr-10 py-2 sm:pl-4 sm:pr-12 sm:py-3 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all"
+                    className="w-full bg-white border border-gray-200 rounded-lg pl-3 pr-10 py-2.5 sm:pl-4 sm:pr-12 sm:py-3 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all"
                     disabled={chatLoading}
                   />
                   <button
@@ -648,26 +649,38 @@ const TutorChat: React.FC = () => {
                 </div>
 
                 {/* ChatGPT-style icons below input */}
-                <div className="flex items-center justify-center gap-4 mt-3">
-                  <button className="text-xs text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1">
+                <div className="flex items-center justify-center gap-2 sm:gap-4 mt-2 sm:mt-3 flex-wrap">
+                  <button
+                    onClick={() => handleSkillAction("explain this concept")}
+                    className="text-xs text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1"
+                  >
                     <BookOpen className="w-3 h-3" />
                     <span>Explain</span>
                   </button>
-                  <button className="text-xs text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1">
+                  <button
+                    onClick={() => handleSkillAction("quiz me on this")}
+                    className="text-xs text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1"
+                  >
                     <BrainCircuit className="w-3 h-3" />
                     <span>Quiz</span>
                   </button>
-                  <button className="text-xs text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1">
+                  <button
+                    onClick={() => handleSkillAction("help me think about this")}
+                    className="text-xs text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1"
+                  >
                     <HelpCircle className="w-3 h-3" />
                     <span>Help</span>
                   </button>
-                  <button className="text-xs text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1">
+                  <button
+                    onClick={() => handleSkillAction("how am I doing")}
+                    className="text-xs text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1"
+                  >
                     <BarChart3 className="w-3 h-3" />
                     <span>Progress</span>
                   </button>
                 </div>
 
-                <p className="text-xs text-gray-400 text-center mt-3">
+                <p className="text-xs text-gray-400 text-center mt-2 sm:mt-3 hidden sm:block">
                   Free Research Preview. AI Tutor may produce inaccurate
                   information.
                 </p>
